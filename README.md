@@ -1,18 +1,22 @@
 
-# Tutorial 
+# Characterizing Ocean Ecosystems using Sentinel-3 data with Julia
 
-- Author : Gaël Forget (MIT)
-- Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
-- More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
+- Author : `Gaël Forget (MIT)`
+- Event : `Atlantic Innovation Week 2023`
+- Date : `2023/03/21`
+- More Info : [AIW23](https://www.atlanticinnovationweek.org), [julia](https://julialang.org)
+
+_Directions for downloading Julia and this folder are provided below._
 
 ## 3. Interact With Notebooks
 
-_Under construction ..._
+1. [Pluto](https://plutojl-preview.netlify.app) : provided
+2. [Jupyter](https://jupyter.org) : DYI as exercise
 
-1. Jupyter
-2. Pluto
+!!! Tip 
+    For jupyter, you can : open new notebook, choose Julia as kernel, and copy/paste code from Pluto notebook.
 
-## 2. Generate First Plot
+## 2. Read Data and Visualize
 
 Once you have completed the set-up (section 1 below) then try
 
@@ -25,7 +29,7 @@ This should open a widow displaying a collection of data points.
 
 ## 1. Get Julia and Set-Up
 
-- Download and Start Julia ([go here](https://julialang.org))
+- Download and Start Julia ([go here](https://julialang.org/downloads/))
 - Download this folder and copy its path
 - Provide this path as `path0` (see below)
 - Run commands below in Julia (type _return_ after each line).
