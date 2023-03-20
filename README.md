@@ -1,4 +1,10 @@
 
+# Tutorial 
+
+- Author : Gaël Forget (MIT)
+- Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
+- More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
+
 ## 3. Interact With Notebooks
 
 1. Jupyter
