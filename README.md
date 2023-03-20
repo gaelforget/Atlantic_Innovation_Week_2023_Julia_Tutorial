@@ -7,6 +7,8 @@
 
 ## 3. Interact With Notebooks
 
+_Under construction ..._
+
 1. Jupyter
 2. Pluto
 
@@ -23,13 +25,14 @@ This should open a widow displaying a collection of data points.
 
 ## 1. Get Julia and Set-Up
 
-- Download and Start Julia
-- Download this folder and copy its path (`path0`)
-- Download and Start Julia
-- Run commands below (copy line then hit _return_)
+- Download and Start Julia ([go here](https://julialang.org))
+- Download this folder and copy its path
+- Provide this path as `path0` (see below)
+- Run commands below in Julia (type _return_ after each line).
 
 ```
 path0="PASTE CORRECT PATH HERE"
+
 cd(path0)
 using Pkg
 Pkg.activate(".")
@@ -55,7 +58,11 @@ Status `~/2023-AIW-Tutorial/Project.toml`
   [10745b16] Statistics v1.9.0
 ```
 
-The data was downloaded from <https://dataspace.copernicus.eu>. We used the following samples for this tutorial. These are data from `Sentinel-3B` for ocean color.
+## Data
+
+The data is downloaded from <https://dataspace.copernicus.eu> and the following samples used for this tutorial. 
+
+This data was collected by `Sentinel-3B` for ocean color.
 
 - `S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/`
 - `S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/`
