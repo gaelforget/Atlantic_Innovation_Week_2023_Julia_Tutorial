@@ -21,18 +21,17 @@ begin
 end
 
 # ╔═╡ ab58c2cd-58db-442f-9bac-7fe7c2cefe13
-md"""# Atlantic Innovatiopn Week 2023
+md"""# Atlantic Innovation Week 2023
 
 - Author : Gaël Forget (MIT)
-- Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
+- Tutorial Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
 - More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
 
-The data was collected by `Sentinel-3B` for [ocean color](https://sentinel.esa.int/web/sentinel/missions/sentinel-3/data-products/olci). 
-
-It is downloaded from <https://dataspace.copernicus.eu>
+The data was collected by `Sentinel-3B` for [ocean color](https://sentinel.esa.int/web/sentinel/missions/sentinel-3/data-products/olci) and downloaded from <https://dataspace.copernicus.eu>
 
 Example of files names for this tutorial ([naming convention](https://sentinel.esa.int/web/sentinel/user-guides/sentinel-3-olci/naming-convention)) :
 
+- sample file provided with notebook : `S3B_WFR_sample.SEN3`
 - `S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/`
 - `S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/`
 - `S3B_OL_2_WFR____20230319T210557_20230319T210857_20230319T230901_0179_077_214_2160_MAR_O_NR_003.SEN3/`
@@ -56,13 +55,10 @@ Select one of the folders listed below.
 """
 
 # ╔═╡ f8c03254-a831-497a-8134-2cc2c8ec5aae
-S3B_list=glob("S3B*WFR*.SEN3")
+S3B_list=glob("S3B*.SEN3")
 
 # ╔═╡ dee06b55-2d07-4aa4-85bf-466f71e1e88d
-@bind pth Select(S3B_list)
-
-# ╔═╡ 43e3b516-7f23-4972-b30a-6b128c4bd708
-#S3A_list=glob("S3A*WFR*.SEN3")
+@bind pth Select(S3B_list,default="S3B_WFR_sample.SEN3")
 
 # ╔═╡ dab79ee7-06e9-4728-9bf3-d5b5b8dcec95
 md"""#### Folder Content"""
@@ -98,17 +94,6 @@ begin
 	"""
 end
 
-# ╔═╡ 47134d3e-2c8c-4b8a-aef8-621bb894dc84
-function lonlat(nn)
-	lon = Dataset(joinpath(pth,"geo_coordinates.nc"),"r") do ds
-	    ds["longitude"][:,:]
-	end # ds is closed
-	lat = Dataset(joinpath(pth,"geo_coordinates.nc"),"r") do ds
-	    ds["latitude"][:,:]
-	end # ds is closed
-	return Float32.(lon[1:nn:end,1:nn:end]),Float32.(lat[1:nn:end,1:nn:end])
-end
-
 # ╔═╡ 6f6adbef-d2de-4a77-ae92-a20cc839510b
 nc[vv]
 
@@ -135,9 +120,6 @@ begin
 	summary(data)
 end
 
-
-# ╔═╡ 138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
-lon,lat=lonlat(nn)
 
 # ╔═╡ b8e3225f-e5c8-4934-a282-cc61540bd583
 begin
@@ -213,6 +195,20 @@ function earth_topo()
 
 	fig
 end
+
+# ╔═╡ 47134d3e-2c8c-4b8a-aef8-621bb894dc84
+function lonlat(nn)
+	lon = Dataset(joinpath(pth,"geo_coordinates.nc"),"r") do ds
+	    ds["longitude"][:,:]
+	end # ds is closed
+	lat = Dataset(joinpath(pth,"geo_coordinates.nc"),"r") do ds
+	    ds["latitude"][:,:]
+	end # ds is closed
+	return Float32.(lon[1:nn:end,1:nn:end]),Float32.(lat[1:nn:end,1:nn:end])
+end
+
+# ╔═╡ 138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
+lon,lat=lonlat(nn)
 
 # ╔═╡ f86de2a3-dfd5-4f3f-806f-db9851b9ed16
 function earth_view(tmp,rng)
@@ -1696,13 +1692,12 @@ version = "3.5.0+0"
 
 # ╔═╡ Cell order:
 # ╟─ab58c2cd-58db-442f-9bac-7fe7c2cefe13
-# ╠═1a934c5a-c42a-4e96-b77f-7b8d12ba4232
+# ╟─1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 # ╟─8a464930-c831-4186-80bd-9a93f1a17a84
 # ╠═1568db26-c5a8-11ed-06fe-51f2d1767871
 # ╟─1fa11762-fd7e-4b7b-bcfa-4508a410cec9
 # ╟─dee06b55-2d07-4aa4-85bf-466f71e1e88d
 # ╟─f8c03254-a831-497a-8134-2cc2c8ec5aae
-# ╠═43e3b516-7f23-4972-b30a-6b128c4bd708
 # ╟─dab79ee7-06e9-4728-9bf3-d5b5b8dcec95
 # ╟─634e6db7-c003-4c04-a1c5-4d58a0f126bf
 # ╟─33b3c4b7-b31e-4bcb-805e-421a39ab4737
