@@ -4,51 +4,174 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ 1568db26-c5a8-11ed-06fe-51f2d1767871
-using GLMakie, NCDatasets, PlutoUI, FileIO, Colors, Statistics, Downloads
+begin
+	using GLMakie, PlutoUI, Colors, Statistics 
+	using NCDatasets, FileIO, Downloads, Glob
+end
+
+# ╔═╡ ab58c2cd-58db-442f-9bac-7fe7c2cefe13
+md"""# Atlantic Innovatiopn Week 2023
+
+- Author : Gaël Forget (MIT)
+- Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
+- More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
+
+The data was collected by `Sentinel-3B` for [ocean color](https://sentinel.esa.int/web/sentinel/missions/sentinel-3/data-products/olci). 
+
+It is downloaded from <https://dataspace.copernicus.eu>
+
+Example of files names for this tutorial ([naming convention](https://sentinel.esa.int/web/sentinel/user-guides/sentinel-3-olci/naming-convention)) :
+
+- `S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/`
+- `S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/`
+- `S3B_OL_2_WFR____20230319T210557_20230319T210857_20230319T230901_0179_077_214_2160_MAR_O_NR_003.SEN3/`
+"""
 
 # ╔═╡ 1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 TableOfContents()
 
-# ╔═╡ 80da7ac1-2018-48d8-97f3-b3577caeca00
-pth="S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/"
-#pth="S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/"
-#pth="S3B_OL_2_WFR____20230319T210557_20230319T210857_20230319T230901_0179_077_214_2160_MAR_O_NR_003.SEN3/"
+# ╔═╡ 8a464930-c831-4186-80bd-9a93f1a17a84
+md"""## Julia Packages"""
+
+# ╔═╡ 1fa11762-fd7e-4b7b-bcfa-4508a410cec9
+md"""## Choose Variable
+
+### Select Folder
+
+Select one of the folders listed below. 
+
+!!! warning
+    Data folders must be downloaded separately.
+"""
+
+# ╔═╡ f8c03254-a831-497a-8134-2cc2c8ec5aae
+S3B_list=glob("S3B*WFR*.SEN3")
+
+# ╔═╡ dee06b55-2d07-4aa4-85bf-466f71e1e88d
+@bind pth Select(S3B_list)
+
+# ╔═╡ 43e3b516-7f23-4972-b30a-6b128c4bd708
+#S3A_list=glob("S3A*WFR*.SEN3")
+
+# ╔═╡ dab79ee7-06e9-4728-9bf3-d5b5b8dcec95
+md"""#### Folder Content"""
+
+# ╔═╡ 634e6db7-c003-4c04-a1c5-4d58a0f126bf
+display.(readdir(pth));
+
+# ╔═╡ 33b3c4b7-b31e-4bcb-805e-421a39ab4737
+begin
+	nc_list=basename.(glob("*.nc",pth))
+	select_fil = @bind fil Select(nc_list, default="par.nc")
+	md"""### Select File
+	
+	$(select_fil) 
+	"""
+end
+
+# ╔═╡ 966467bf-165a-46e4-8211-50121d02f64e
+md"""#### File Content"""
 
 # ╔═╡ 1af139a0-2438-48ff-adaf-66178086234d
 begin
-	#ff="chl_oc4me.nc"
-	ff=joinpath(pth,"par.nc")
-	vv="PAR"
+	ff=joinpath(pth,fil)
+	nc=Dataset(ff)
 end
 
-# ╔═╡ c90d144b-157e-4dc2-a650-5aa79fba4238
-nc=Dataset(ff)
+# ╔═╡ c01afa89-610c-402e-8f06-654cf0ecc45e
+begin
+	select_vv = @bind vv Select(keys(nc))
+	md"""### Select Variable
+	
+	$(select_vv)
+	"""
+end
 
 # ╔═╡ 47134d3e-2c8c-4b8a-aef8-621bb894dc84
-function lonlat()
+function lonlat(nn)
 	lon = Dataset(joinpath(pth,"geo_coordinates.nc"),"r") do ds
 	    ds["longitude"][:,:]
 	end # ds is closed
 	lat = Dataset(joinpath(pth,"geo_coordinates.nc"),"r") do ds
 	    ds["latitude"][:,:]
 	end # ds is closed
-	return Float32.(lon[1:16:end,1:16:end]),Float32.(lat[1:16:end,1:16:end])
+	return Float32.(lon[1:nn:end,1:nn:end]),Float32.(lat[1:nn:end,1:nn:end])
 end
 
-# ╔═╡ 138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
-lon,lat=lonlat()
+# ╔═╡ 6f6adbef-d2de-4a77-ae92-a20cc839510b
+nc[vv]
+
+# ╔═╡ 1b3be3d3-787d-4b87-98df-deabba93d3e6
+md"""## Read Data From File
+
+It is only when we index into `nc[vv]` that data is read to memory. Until then, only meta-data has been read from file. To extract only a subset (1 point every `nn`), we just need to specify indices accordingly. 
+
+Once the `data` array has been read, we do a bit of data munging :
+
+- fill in missing values with NaN (for plotting)
+- convert to a Float64 array (for `scatter`)
+- list all valid data points (for `scatter`)
+"""
 
 # ╔═╡ 6aefcde9-70dc-4c45-b85e-3c5830fedfe1
 begin
-    nn=1 #set to 1 for highest resol
-	data=nc[vv][1:nn:end,1:nn:end] #get data & subset    
+    nn=4 #set to 1 for full resolution
+	data=nc[vv][1:nn:end,1:nn:end] #get data & subset
+	
     data[findall(ismissing.(data))].=NaN #flag missing values
-    ii=findall(isfinite.(data)) #real data points
+	data=Float64.(data) #convert to Float64
+    ii=findall(isfinite.(data)) #actual data points
+	summary(data)
+end
+
+
+# ╔═╡ 138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
+lon,lat=lonlat(nn)
+
+# ╔═╡ b8e3225f-e5c8-4934-a282-cc61540bd583
+begin
+	select_plt=@bind plt Select(["earth view","scatter plot"],default="scatter plot")
+	md"""## Visualize Data
+	
+	$(select_fil) 
+	$(select_vv)
+	$(select_plt)
+	"""
 end
 
 # ╔═╡ 58b6031c-70ce-447d-a9ac-fdcab3a538e7
-hist(data[ii])
+let
+	fig=Figure(resolution=(400,200),fontsize=10)
+	ax=Axis(fig[1,1],title="$(vv) Histogram")
+	hist!(ax,data[ii])
+	fig
+end
+
+# ╔═╡ 6d532e8d-bcb3-4c05-a711-74fa3422d092
+md"""#### Helper functions"""
+
+# ╔═╡ 353eaa73-9a24-401f-b358-0802e7acd736
+function rotation_angles(lon,lat)
+#	    lon_corner=[lon[1,1],lon[1,end],lon[end,1],lon[end,end]]
+#	    lat_corner=[lat[1,1],lat[1,end],lat[end,1],lat[end,end]]
+#	    φ1=mean(mod.(-pi/180*lon_corner[:],pi)) .+pi/4
+#	    θ1=mean(pi/180*lat_corner[:]) -pi/4
+	(n1,n2)=Int.(round.(size(lon)./2))
+	φ1=-pi/180*lon[n1,n2]+pi+pi/4
+	θ1=pi/180*lat[n1,n2]-pi/4
+	return φ1,θ1 
+end
 
 # ╔═╡ 023abd64-e677-4ccb-bc08-25610ca7d9a8
 function xyz_point(φ,θ)
@@ -74,84 +197,68 @@ function xyz_base(φ,θ)
 	return (x,y,z)
 end
 
-# ╔═╡ 59dd9905-d619-49a5-8f74-50e4993ef310
-pth0=pth
+# ╔═╡ 93469556-e35c-4fd4-8bb8-ebbba60dad0b
+function earth_topo()
+	topo_file=joinpath(tempdir(),"Blue_Marble_Next_Generation_topography_bathymetry.jpg")
+	topo_url="https://upload.wikimedia.org/wikipedia/commons/5/56/Blue_Marble_Next_Generation_%2B_topography_%2B_bathymetry.jpg"
+	!isfile(topo_file) ? Downloads.download(topo_url,topo_file) : nothing
+	topo_img = load(topo_file)
+
+	n = 1024 ÷ 4 # 2048
+	θ = LinRange(0, π, n)
+	φ = LinRange(0, 2π, 2 * n)
+	fig = Figure(resolution = (1200, 800), backgroundcolor = :grey80)
+	ax = LScene(fig[1, 1], show_axis = false)
+	surface!(ax, xyz_base(φ,θ)...; color = Gray.(topo_img)*0.8.+0.2)
+
+	fig
+end
 
 # ╔═╡ f86de2a3-dfd5-4f3f-806f-db9851b9ed16
-begin
+function earth_view(tmp,rng)
+	#1. plot Earth Topography as background
+	fig=earth_topo()
+	ax=current_axis()
 
-	function earth_view(tmp,rng)
-	    #1. plot Earth Topography as background
-		fig=earth_topo()
-		ax=current_axis()
-	
-	    #2. superimpose data
-	
-	    #convert to spherical coordinates
-	    θ0=pi/2 .- pi/180*lat
-	    φ0=pi/180*lon .+ pi
-	
-	    #now plot data
-	    surface!(ax, xyz_tile(φ0,θ0)...; color = data, shading = false,
-	        lightposition = Vec3f(-2, -3, -3), ambient = Vec3f(0.8, 0.8, 0.8),
-	        backlight = 1.5f0, colorrange=rng, colormap=:thermal)
-	
-	    #zoom in
-	    zoom!(ax.scene, cameracontrols(ax.scene), 0.4)
-	
-	    #put data to center of plot
-	    φ1,θ1=rotation_angles(lon,lat)
-	    rotate!(Accum,ax.scene, Vec3f(0, 0, 1), φ1)
-	    rotate!(Accum,ax.scene, Vec3f(1, -1, 0), θ1)
-	
-	    fig
-	end
-	
+	#2. superimpose data
 
-	function earth_topo()
-		topo_file=joinpath(tempdir(),"Blue_Marble_Next_Generation_topography_bathymetry.jpg")
-		topo_url="https://upload.wikimedia.org/wikipedia/commons/5/56/Blue_Marble_Next_Generation_%2B_topography_%2B_bathymetry.jpg"
-		!isfile(topo_file) ? Downloads.download(topo_url,topo_file) : nothing
-		topo_img = load(topo_file)
+	#convert to spherical coordinates
+	θ0=pi/2 .- pi/180*lat
+	φ0=pi/180*lon .+ pi
 
-		n = 1024 ÷ 4 # 2048
-		θ = LinRange(0, π, n)
-		φ = LinRange(0, 2π, 2 * n)
-		fig = Figure(resolution = (1200, 800), backgroundcolor = :grey80)
-		ax = LScene(fig[1, 1], show_axis = false)
-		surface!(ax, xyz_base(φ,θ)...; color = Gray.(topo_img))
+	#now plot data
+	surface!(ax, xyz_tile(φ0,θ0)...; color = data, shading = false,
+		lightposition = Vec3f(-2, -3, -3), ambient = Vec3f(0.8, 0.8, 0.8),
+		backlight = 1.5f0, colorrange=rng, colormap=:thermal)
 
-		fig
-	end
-	
-	function rotation_angles(lon,lat)
-#	    lon_corner=[lon[1,1],lon[1,end],lon[end,1],lon[end,end]]
-#	    lat_corner=[lat[1,1],lat[1,end],lat[end,1],lat[end,end]]
-#	    φ1=mean(mod.(-pi/180*lon_corner[:],pi)) .+pi/4
-#	    θ1=mean(pi/180*lat_corner[:]) -pi/4
-		(n1,n2)=Int.(round.(size(lon)./2))
-		φ1=-pi/180*lon[n1,n2]+pi+pi/4
-		θ1=pi/180*lat[n1,n2]-pi/4
-	    return φ1,θ1 
-	end
+	#zoom in
+	zoom!(ax.scene, cameracontrols(ax.scene), 0.4)
+
+	#put data to center of plot
+	φ1,θ1=rotation_angles(lon,lat)
+	rotate!(Accum,ax.scene, Vec3f(0, 0, 1), φ1)
+	rotate!(Accum,ax.scene, Vec3f(1, -1, 0), θ1)
+
+	fig
 end
 
 # ╔═╡ b4887586-1177-41ff-aaac-3bbbe3741cef
-if true
-	f=earth_view(data,(1200.0,1800.0))
+if plt=="earth view"
+	rng=quantile!(data[ii], [0.05,0.95])
+	f=earth_view(data,rng)
 else
-	f=scatter(lon[ii],lat[ii],color=Float64.(data[ii]))
+	(x,y,c)=(lon[ii],lat[ii],data[ii])
+	f=scatter(x,y,color=c,axis=(title="$(vv) Map",))
 end
-
-# ╔═╡ 93469556-e35c-4fd4-8bb8-ebbba60dad0b
-
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+Glob = "c27321d9-0574-5035-807b-f59d2c89b15c"
 NCDatasets = "85f8d34a-cbdd-5861-8df4-14fed0d494ab"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
@@ -160,6 +267,7 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 Colors = "~0.12.10"
 FileIO = "~1.16.0"
 GLMakie = "~0.8.2"
+Glob = "~1.3.0"
 NCDatasets = "~0.12.13"
 PlutoUI = "~0.7.50"
 """
@@ -170,7 +278,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0-rc1"
 manifest_format = "2.0"
-project_hash = "c572a6aa608cdb76e2924d38de8caf31a4dcd8be"
+project_hash = "996f3a5bae27625218c311c88daff66985e67dd3"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -525,9 +633,9 @@ version = "1.2.1"
 
 [[deps.GeometryBasics]]
 deps = ["EarCut_jll", "GeoInterface", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
-git-tree-sha1 = "fe9aea4ed3ec6afdfbeb5a4f39a2208909b162a6"
+git-tree-sha1 = "303202358e38d2b01ba46844b92e48a3c238fd9e"
 uuid = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
-version = "0.4.5"
+version = "0.4.6"
 
 [[deps.Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
@@ -540,6 +648,11 @@ deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libic
 git-tree-sha1 = "d3b3624125c1474292d0d8ed0f65554ac37ddb23"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
 version = "2.74.0+2"
+
+[[deps.Glob]]
+git-tree-sha1 = "4df9f7e06108728ebf00a0a11edee4b29a482bb2"
+uuid = "c27321d9-0574-5035-807b-f59d2c89b15c"
+version = "1.3.0"
 
 [[deps.Graphics]]
 deps = ["Colors", "LinearAlgebra", "NaNMath"]
@@ -1582,21 +1695,34 @@ version = "3.5.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═1568db26-c5a8-11ed-06fe-51f2d1767871
+# ╟─ab58c2cd-58db-442f-9bac-7fe7c2cefe13
 # ╠═1a934c5a-c42a-4e96-b77f-7b8d12ba4232
-# ╠═80da7ac1-2018-48d8-97f3-b3577caeca00
-# ╠═1af139a0-2438-48ff-adaf-66178086234d
-# ╠═c90d144b-157e-4dc2-a650-5aa79fba4238
-# ╠═47134d3e-2c8c-4b8a-aef8-621bb894dc84
-# ╠═138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
-# ╠═f86de2a3-dfd5-4f3f-806f-db9851b9ed16
+# ╟─8a464930-c831-4186-80bd-9a93f1a17a84
+# ╠═1568db26-c5a8-11ed-06fe-51f2d1767871
+# ╟─1fa11762-fd7e-4b7b-bcfa-4508a410cec9
+# ╟─dee06b55-2d07-4aa4-85bf-466f71e1e88d
+# ╟─f8c03254-a831-497a-8134-2cc2c8ec5aae
+# ╠═43e3b516-7f23-4972-b30a-6b128c4bd708
+# ╟─dab79ee7-06e9-4728-9bf3-d5b5b8dcec95
+# ╟─634e6db7-c003-4c04-a1c5-4d58a0f126bf
+# ╟─33b3c4b7-b31e-4bcb-805e-421a39ab4737
+# ╟─966467bf-165a-46e4-8211-50121d02f64e
+# ╟─1af139a0-2438-48ff-adaf-66178086234d
+# ╟─c01afa89-610c-402e-8f06-654cf0ecc45e
+# ╟─6f6adbef-d2de-4a77-ae92-a20cc839510b
+# ╟─138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
+# ╟─1b3be3d3-787d-4b87-98df-deabba93d3e6
 # ╠═6aefcde9-70dc-4c45-b85e-3c5830fedfe1
-# ╠═b4887586-1177-41ff-aaac-3bbbe3741cef
+# ╟─b8e3225f-e5c8-4934-a282-cc61540bd583
+# ╟─b4887586-1177-41ff-aaac-3bbbe3741cef
 # ╠═58b6031c-70ce-447d-a9ac-fdcab3a538e7
-# ╠═023abd64-e677-4ccb-bc08-25610ca7d9a8
-# ╠═a1091b0c-7548-4faf-944d-8558d022710e
-# ╠═ecbb78da-a2e3-447d-a020-e3c3007f01d9
-# ╠═59dd9905-d619-49a5-8f74-50e4993ef310
-# ╠═93469556-e35c-4fd4-8bb8-ebbba60dad0b
+# ╟─6d532e8d-bcb3-4c05-a711-74fa3422d092
+# ╟─f86de2a3-dfd5-4f3f-806f-db9851b9ed16
+# ╟─93469556-e35c-4fd4-8bb8-ebbba60dad0b
+# ╟─353eaa73-9a24-401f-b358-0802e7acd736
+# ╟─023abd64-e677-4ccb-bc08-25610ca7d9a8
+# ╟─a1091b0c-7548-4faf-944d-8558d022710e
+# ╟─ecbb78da-a2e3-447d-a020-e3c3007f01d9
+# ╟─47134d3e-2c8c-4b8a-aef8-621bb894dc84
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
