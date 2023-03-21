@@ -26,29 +26,49 @@ md"""# Atlantic Innovation Week 2023
 - Author : Gaël Forget (MIT)
 - Tutorial Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
 - More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
+- Repo URL : [github.com/gaelforget/Atlantic\_Innovation\_Week\_2023\_Julia\_Tutorial](https://github.com/gaelforget/Atlantic_Innovation_Week_2023_Julia_Tutorial)
 
 The data was collected by `Sentinel-3B` for [ocean color](https://sentinel.esa.int/web/sentinel/missions/sentinel-3/data-products/olci) and downloaded from <https://dataspace.copernicus.eu>
 """
+
+# ╔═╡ e2ea7489-0746-49d0-9696-a29d9169f523
+begin
+	url1="https://user-images.githubusercontent.com/20276764/226686313-bf4d895c-4789-4184-8e73-3d0dba30b3f1.svg"
+	url2="https://user-images.githubusercontent.com/20276764/226685779-4536437e-4838-4a6e-a6a4-c202532829a1.svg"
+	url3="https://wonderfulengineering.com/wp-content/uploads/2013/12/mit-massachusetts-institute-of-technology-logo-wallpaper.jpg"
+	
+	md"""	
+ 	$(PlutoUI.Resource(url1,:height => 90))
+	$(PlutoUI.Resource(url3,:height => 80))
+	$(PlutoUI.Resource(url2,:height => 70))
+	"""
+end
 
 # ╔═╡ 1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 TableOfContents()
 
 # ╔═╡ 88c5a58d-d311-4db0-82bc-5a9ccec3af39
-md"""## Julia Basics"""
+md"""## Julia Basics
+
+- variables
+- types
+- functions
+- element-wise operation or _broadcasting_ with `.`
+- plotting with Makie
+"""
 
 # ╔═╡ f9b138b6-cdf0-4124-b94f-61a8dd87b525
 let
 	#x=1+2
 	#x=sum(1:3)
+	
+	#typeof(x)
+	#typeof(1:3)
+	#typeof([1:3])
+
 	#y=randn(10000)
 	#hist(y)
 	#hist(log10.(y.^2))
-end
-
-# ╔═╡ 6b78f344-c21a-4d0d-9a08-f0243a2b4e10
-begin
-	#using Example
-	#hello("There!")
 end
 
 # ╔═╡ 8a464930-c831-4186-80bd-9a93f1a17a84
@@ -132,7 +152,7 @@ Once the `data` array has been read, we do a bit of data munging :
 
 # ╔═╡ 6aefcde9-70dc-4c45-b85e-3c5830fedfe1
 begin
-    nn=4 #set to 1 for full resolution
+    nn=2 #set to 1 for full resolution
 	data=nc[vv][1:nn:end,1:nn:end] #get data & subset
 	
     data[findall(ismissing.(data))].=NaN #flag missing values
@@ -152,7 +172,7 @@ end
 
 # ╔═╡ b8e3225f-e5c8-4934-a282-cc61540bd583
 begin
-	select_plt=@bind plt Select(["earth view","scatter plot"],default="scatter plot")
+	select_plt=@bind plt Select(["earth view","scatter plot"],default="earth view")
 	md"""## Visualize Data
 	
 	$(select_fil) 
@@ -1719,11 +1739,11 @@ version = "3.5.0+0"
 
 # ╔═╡ Cell order:
 # ╟─ab58c2cd-58db-442f-9bac-7fe7c2cefe13
+# ╟─e2ea7489-0746-49d0-9696-a29d9169f523
 # ╟─1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 # ╟─88c5a58d-d311-4db0-82bc-5a9ccec3af39
 # ╟─cf1b41f1-9232-40ba-8e97-6cdb89bffd11
 # ╠═f9b138b6-cdf0-4124-b94f-61a8dd87b525
-# ╠═6b78f344-c21a-4d0d-9a08-f0243a2b4e10
 # ╟─8a464930-c831-4186-80bd-9a93f1a17a84
 # ╠═1568db26-c5a8-11ed-06fe-51f2d1767871
 # ╟─1fa11762-fd7e-4b7b-bcfa-4508a410cec9
@@ -1741,7 +1761,7 @@ version = "3.5.0+0"
 # ╟─138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
 # ╟─1b3be3d3-787d-4b87-98df-deabba93d3e6
 # ╠═6aefcde9-70dc-4c45-b85e-3c5830fedfe1
-# ╠═58b6031c-70ce-447d-a9ac-fdcab3a538e7
+# ╟─58b6031c-70ce-447d-a9ac-fdcab3a538e7
 # ╟─b8e3225f-e5c8-4934-a282-cc61540bd583
 # ╟─b4887586-1177-41ff-aaac-3bbbe3741cef
 # ╟─6d532e8d-bcb3-4c05-a711-74fa3422d092
