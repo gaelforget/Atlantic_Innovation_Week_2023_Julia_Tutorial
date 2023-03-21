@@ -68,11 +68,4 @@ Status `~/2023-AIW-Tutorial/Project.toml`
 
 ## Data
 
-The data is downloaded from <https://dataspace.copernicus.eu> and the following samples used for this tutorial. 
-
-This data was collected by `Sentinel-3B` for ocean color.
-
-- `S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/`
-- `S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/`
-- `S3B_OL_2_WFR____20230319T210557_20230319T210857_20230319T230901_0179_077_214_2160_MAR_O_NR_003.SEN3/`
-
+Additional data can be downloaded from <https://dataspace.copernicus.eu> . The data sample used for this tutorial is in `S3B_WFR_sample.SEN3`. 
