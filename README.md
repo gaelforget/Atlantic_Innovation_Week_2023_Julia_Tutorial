@@ -33,7 +33,7 @@ This should open a widow displaying a collection of data points.
 
 ## 1. Get Julia and Set-Up
 
-- Download and Start Julia ([go here](https://julialang.org/downloads/))
+- Download [Julia 1.9](https://julialang.org/downloads/#upcoming_release) and Start Julia ([go here for docs](https://julialang.org))
 - Download this folder and copy its path
 - Provide this path as `path0` (see below)
 - Run commands below in Julia (type _return_ after each line).
@@ -66,6 +66,4 @@ Status `~/2023-AIW-Tutorial/Project.toml`
   [10745b16] Statistics v1.9.0
 ```
 
-## Data
-
-Additional data can be downloaded from <https://dataspace.copernicus.eu> . The data sample used for this tutorial is in `S3B_WFR_sample.SEN3`. 
+_Note for Windows User : use double backslash in file paths, e.g., `cd("C:\\Users\\Joe\\Folder")`._
