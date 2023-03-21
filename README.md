@@ -17,6 +17,10 @@ _Directions for using Julia and the notebook are provided below._
 1. [Pluto](https://plutojl-preview.netlify.app) : provided
 2. [Jupyter](https://jupyter.org) : DYI as exercise
 
+```
+using Pluto; Pluto.run(notebook="Sentinel-3_first_plot.jl")
+```
+
 !!! Tip 
     For jupyter, you can : open new notebook, choose Julia as kernel, and copy/paste code from Pluto notebook.
 
