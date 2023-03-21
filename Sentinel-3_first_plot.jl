@@ -26,9 +26,23 @@ md"""# Atlantic Innovation Week 2023
 - Author : Gaël Forget (MIT)
 - Tutorial Title : Ocean ecosystems characterization using Copernicus Marine data and Julia programming
 - More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
+- Repo URL : [github.com/gaelforget/Atlantic\_Innovation\_Week\_2023\_Julia\_Tutorial](https://github.com/gaelforget/Atlantic_Innovation_Week_2023_Julia_Tutorial)
 
 The data was collected by `Sentinel-3B` for [ocean color](https://sentinel.esa.int/web/sentinel/missions/sentinel-3/data-products/olci) and downloaded from <https://dataspace.copernicus.eu>
 """
+
+# ╔═╡ e2ea7489-0746-49d0-9696-a29d9169f523
+begin
+	url1="https://user-images.githubusercontent.com/20276764/226686313-bf4d895c-4789-4184-8e73-3d0dba30b3f1.svg"
+	url2="https://user-images.githubusercontent.com/20276764/226685779-4536437e-4838-4a6e-a6a4-c202532829a1.svg"
+	url3="https://wonderfulengineering.com/wp-content/uploads/2013/12/mit-massachusetts-institute-of-technology-logo-wallpaper.jpg"
+	
+	md"""	
+ 	$(PlutoUI.Resource(url1,:height => 90))
+	$(PlutoUI.Resource(url3,:height => 80))
+	$(PlutoUI.Resource(url2,:height => 70))
+	"""
+end
 
 # ╔═╡ 1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 TableOfContents()
@@ -1719,6 +1733,7 @@ version = "3.5.0+0"
 
 # ╔═╡ Cell order:
 # ╟─ab58c2cd-58db-442f-9bac-7fe7c2cefe13
+# ╟─e2ea7489-0746-49d0-9696-a29d9169f523
 # ╟─1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 # ╟─88c5a58d-d311-4db0-82bc-5a9ccec3af39
 # ╟─cf1b41f1-9232-40ba-8e97-6cdb89bffd11
@@ -1745,7 +1760,7 @@ version = "3.5.0+0"
 # ╟─b8e3225f-e5c8-4934-a282-cc61540bd583
 # ╟─b4887586-1177-41ff-aaac-3bbbe3741cef
 # ╟─6d532e8d-bcb3-4c05-a711-74fa3422d092
-# ╟─f86de2a3-dfd5-4f3f-806f-db9851b9ed16
+# ╠═f86de2a3-dfd5-4f3f-806f-db9851b9ed16
 # ╟─93469556-e35c-4fd4-8bb8-ebbba60dad0b
 # ╟─353eaa73-9a24-401f-b358-0802e7acd736
 # ╟─023abd64-e677-4ccb-bc08-25610ca7d9a8
