@@ -17,6 +17,10 @@ _Directions for using Julia and the notebook are provided below._
 1. [Pluto](https://plutojl-preview.netlify.app) : provided
 2. [Jupyter](https://jupyter.org) : DYI as exercise
 
+```
+using Pluto; Pluto.run(notebook="Sentinel-3_first_plot.jl")
+```
+
 !!! Tip 
     For jupyter, you can : open new notebook, choose Julia as kernel, and copy/paste code from Pluto notebook.
 
@@ -33,7 +37,7 @@ This should open a widow displaying a collection of data points.
 
 ## 1. Get Julia and Set-Up
 
-- Download and Start Julia ([go here](https://julialang.org/downloads/))
+- Download [Julia 1.9](https://julialang.org/downloads/#upcoming_release) and Start Julia ([go here for docs](https://julialang.org))
 - Download this folder and copy its path
 - Provide this path as `path0` (see below)
 - Run commands below in Julia (type _return_ after each line).
@@ -66,13 +70,4 @@ Status `~/2023-AIW-Tutorial/Project.toml`
   [10745b16] Statistics v1.9.0
 ```
 
-## Data
-
-The data is downloaded from <https://dataspace.copernicus.eu> and the following samples used for this tutorial. 
-
-This data was collected by `Sentinel-3B` for ocean color.
-
-- `S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/`
-- `S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/`
-- `S3B_OL_2_WFR____20230319T210557_20230319T210857_20230319T230901_0179_077_214_2160_MAR_O_NR_003.SEN3/`
-
+_Note for Windows User : use double backslash in file paths, e.g., `cd("C:\\Users\\Joe\\Folder")`._
