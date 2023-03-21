@@ -28,31 +28,52 @@ md"""# Atlantic Innovation Week 2023
 - More Info : [Atlantic Innovation Week 2023](https://www.atlanticinnovationweek.org)
 
 The data was collected by `Sentinel-3B` for [ocean color](https://sentinel.esa.int/web/sentinel/missions/sentinel-3/data-products/olci) and downloaded from <https://dataspace.copernicus.eu>
-
-Example of files names for this tutorial ([naming convention](https://sentinel.esa.int/web/sentinel/user-guides/sentinel-3-olci/naming-convention)) :
-
-- sample file provided with notebook : `S3B_WFR_sample.SEN3`
-- `S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/`
-- `S3B_OL_2_WFR____20230319T142800_20230319T143100_20230319T163253_0179_077_210_2520_MAR_O_NR_003.SEN3/`
-- `S3B_OL_2_WFR____20230319T210557_20230319T210857_20230319T230901_0179_077_214_2160_MAR_O_NR_003.SEN3/`
 """
 
 # ╔═╡ 1a934c5a-c42a-4e96-b77f-7b8d12ba4232
 TableOfContents()
 
+# ╔═╡ 88c5a58d-d311-4db0-82bc-5a9ccec3af39
+md"""## Julia Basics"""
+
+# ╔═╡ f9b138b6-cdf0-4124-b94f-61a8dd87b525
+let
+	#x=1+2
+	#x=sum(1:3)
+	#y=randn(10000)
+	#hist(y)
+	#hist(log10.(y.^2))
+end
+
+# ╔═╡ 6b78f344-c21a-4d0d-9a08-f0243a2b4e10
+begin
+	#using Example
+	#hello("There!")
+end
+
 # ╔═╡ 8a464930-c831-4186-80bd-9a93f1a17a84
 md"""## Julia Packages"""
 
 # ╔═╡ 1fa11762-fd7e-4b7b-bcfa-4508a410cec9
-md"""## Choose Variable
+md"""## Select Data To View
 
-### Select Folder
+In this section we select data that will be visualized later on, below.
+
+### Select Data Folder
 
 Select one of the folders listed below. 
+"""
 
+# ╔═╡ f89c95de-9110-44a0-9c28-ecd005b1d76a
+md"""
 !!! warning
     Data folders must be downloaded separately.
+	- A small sample folder provided is with notebook : `S3B_WFR_sample.SEN3`
+	- A sample folder name from [server](https://dataspace.copernicus.eu) ([naming convention](https://sentinel.esa.int/web/sentinel/user-guides/sentinel-3-olci/naming-convention))
 """
+
+# ╔═╡ c1a4c7cb-a586-4824-a09f-2a15c4d82d77
+display("S3B_OL_2_WFR____20230318T064415_20230318T064715_20230318T085004_0180_077_191_3420_MAR_O_NR_003.SEN3/")
 
 # ╔═╡ f8c03254-a831-497a-8134-2cc2c8ec5aae
 S3B_list=glob("S3B*.SEN3")
@@ -121,6 +142,14 @@ begin
 end
 
 
+# ╔═╡ 58b6031c-70ce-447d-a9ac-fdcab3a538e7
+let
+	fig=Figure(resolution=(400,200),fontsize=10)
+	ax=Axis(fig[1,1],title="$(vv) Histogram")
+	hist!(ax,data[ii])
+	fig
+end
+
 # ╔═╡ b8e3225f-e5c8-4934-a282-cc61540bd583
 begin
 	select_plt=@bind plt Select(["earth view","scatter plot"],default="scatter plot")
@@ -130,14 +159,6 @@ begin
 	$(select_vv)
 	$(select_plt)
 	"""
-end
-
-# ╔═╡ 58b6031c-70ce-447d-a9ac-fdcab3a538e7
-let
-	fig=Figure(resolution=(400,200),fontsize=10)
-	ax=Axis(fig[1,1],title="$(vv) Histogram")
-	hist!(ax,data[ii])
-	fig
 end
 
 # ╔═╡ 6d532e8d-bcb3-4c05-a711-74fa3422d092
@@ -247,6 +268,12 @@ else
 	f=scatter(x,y,color=c,axis=(title="$(vv) Map",))
 end
 
+# ╔═╡ 41d28c16-c385-4acb-b861-8a236fb1e5f0
+hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
+
+# ╔═╡ cf1b41f1-9232-40ba-8e97-6cdb89bffd11
+hint(md"Uncomment code lines one at a time")
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -274,7 +301,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0-rc1"
 manifest_format = "2.0"
-project_hash = "996f3a5bae27625218c311c88daff66985e67dd3"
+project_hash = "c23015ddcff39aef9a271359190dccdbad7353c4"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1693,10 +1720,16 @@ version = "3.5.0+0"
 # ╔═╡ Cell order:
 # ╟─ab58c2cd-58db-442f-9bac-7fe7c2cefe13
 # ╟─1a934c5a-c42a-4e96-b77f-7b8d12ba4232
+# ╟─88c5a58d-d311-4db0-82bc-5a9ccec3af39
+# ╟─cf1b41f1-9232-40ba-8e97-6cdb89bffd11
+# ╠═f9b138b6-cdf0-4124-b94f-61a8dd87b525
+# ╠═6b78f344-c21a-4d0d-9a08-f0243a2b4e10
 # ╟─8a464930-c831-4186-80bd-9a93f1a17a84
 # ╠═1568db26-c5a8-11ed-06fe-51f2d1767871
 # ╟─1fa11762-fd7e-4b7b-bcfa-4508a410cec9
 # ╟─dee06b55-2d07-4aa4-85bf-466f71e1e88d
+# ╟─f89c95de-9110-44a0-9c28-ecd005b1d76a
+# ╟─c1a4c7cb-a586-4824-a09f-2a15c4d82d77
 # ╟─f8c03254-a831-497a-8134-2cc2c8ec5aae
 # ╟─dab79ee7-06e9-4728-9bf3-d5b5b8dcec95
 # ╟─634e6db7-c003-4c04-a1c5-4d58a0f126bf
@@ -1708,9 +1741,9 @@ version = "3.5.0+0"
 # ╟─138b5d39-a107-4ca5-b7fb-90bfe6f9cc4a
 # ╟─1b3be3d3-787d-4b87-98df-deabba93d3e6
 # ╠═6aefcde9-70dc-4c45-b85e-3c5830fedfe1
+# ╠═58b6031c-70ce-447d-a9ac-fdcab3a538e7
 # ╟─b8e3225f-e5c8-4934-a282-cc61540bd583
 # ╟─b4887586-1177-41ff-aaac-3bbbe3741cef
-# ╠═58b6031c-70ce-447d-a9ac-fdcab3a538e7
 # ╟─6d532e8d-bcb3-4c05-a711-74fa3422d092
 # ╟─f86de2a3-dfd5-4f3f-806f-db9851b9ed16
 # ╟─93469556-e35c-4fd4-8bb8-ebbba60dad0b
@@ -1719,5 +1752,6 @@ version = "3.5.0+0"
 # ╟─a1091b0c-7548-4faf-944d-8558d022710e
 # ╟─ecbb78da-a2e3-447d-a020-e3c3007f01d9
 # ╟─47134d3e-2c8c-4b8a-aef8-621bb894dc84
+# ╟─41d28c16-c385-4acb-b861-8a236fb1e5f0
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
