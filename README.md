@@ -1,5 +1,5 @@
 
-# Characterizing Ocean Ecosystems using Sentinel-3 data with Julia
+# Marine ecosystem monitoring by Sentinel-3, in Julia
 
 - Author : `Gaël Forget (MIT)`
 - Event : `Atlantic Innovation Week 2023`
