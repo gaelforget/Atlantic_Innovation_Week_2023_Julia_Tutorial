@@ -6,7 +6,9 @@
 - Date : `2023/03/21`
 - More Info : [AIW23](https://www.atlanticinnovationweek.org), [julia](https://julialang.org)
 
-The notebook is named [Sentinel-3\_first\_plot.jl](https://github.com/gaelforget/Atlantic_Innovation_Week_2023_Julia_Tutorial/blob/main/Sentinel-3_first_plot.jl) and hosted at [Sentinel-3\_first\_plot.html](https://gaelforget.github.io/Atlantic_Innovation_Week_2023_Julia_Tutorial/Sentinel-3_first_plot.html)
+[![DOI](https://zenodo.org/badge/616272116.svg)](https://zenodo.org/badge/latestdoi/616272116)
+
+Notebook is named [Sentinel-3\_first\_plot.jl](https://github.com/gaelforget/Atlantic_Innovation_Week_2023_Julia_Tutorial/blob/main/Sentinel-3_first_plot.jl) and hosted at [Sentinel-3\_first\_plot.html](https://gaelforget.github.io/Atlantic_Innovation_Week_2023_Julia_Tutorial/Sentinel-3_first_plot.html)
 
 <img src="https://user-images.githubusercontent.com/20276764/226612244-8a0b955a-97e0-4e05-aa90-1857c721f6bd.png" width="300" height="120">
 
